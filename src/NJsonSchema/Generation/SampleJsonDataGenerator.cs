@@ -36,7 +36,10 @@ namespace NJsonSchema.Generation
             if (schema.Type.HasFlag(JsonObjectType.Object) ||
                 schema.AllOf.Any(s => s.ActualProperties.Any()))
             {
-                usedSchemas.Add(schema);
+                var expandedSchema = new HashSet<JsonSchema>(usedSchemas)
+                {
+                    schema,
+                };
 
                 var properties = schema.ActualProperties.Concat(schema.AllOf.SelectMany(s => s.ActualSchema.ActualProperties));
                 var obj = new JObject();
